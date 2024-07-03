@@ -11,24 +11,31 @@ from mini_court import MiniCourt
 import cv2
 import pandas as pd
 from copy import deepcopy
-
+import os
 
 def main():
     # Read Video
-    input_video_path = "input_videos/RG - Trim.mp4"
+    input_video_path = "input_videos/input_video.mp4"
     video_frames = read_video(input_video_path)
+   
+
+    
+    video_filename = os.path.splitext(os.path.basename(input_video_path))[0]
+
+    player_detections_path = f"tracker_stubs/{video_filename}_player_detections.pkl"
+    ball_detections_path = f"tracker_stubs/{video_filename}_ball_detections.pkl"
 
     # Detect Players and Ball
     player_tracker = PlayerTracker(model_path='yolov8x')
     ball_tracker = BallTracker(model_path='models/last.pt')
 
     player_detections = player_tracker.detect_frames(video_frames,
-                                                     read_from_stub=True,
-                                                     stub_path="tracker_stubs/player_detections.pkl"
+                                                     read_from_stub=False,
+                                                     stub_path=player_detections_path
                                                      )
     ball_detections = ball_tracker.detect_frames(video_frames,
-                                                     read_from_stub=True,
-                                                     stub_path="tracker_stubs/ball_detections.pkl"
+                                                     read_from_stub=False,
+                                                     stub_path=ball_detections_path
                                                      )
     ball_detections = ball_tracker.interpolate_ball_positions(ball_detections)
     

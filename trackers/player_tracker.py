@@ -8,15 +8,15 @@ from utils import measure_distance, get_center_of_bbox
 class PlayerTracker:
     def __init__(self,model_path):
         self.model = YOLO(model_path)
-
-    def choose_and_filter_players(self, court_keypoints, player_detections):
-        player_detections_first_frame = player_detections[0]
-        chosen_player = self.choose_players(court_keypoints, player_detections_first_frame)
-        filtered_player_detections = []
-        for player_dict in player_detections:
-            filtered_player_dict = {track_id: bbox for track_id, bbox in player_dict.items() if track_id in chosen_player}
-            filtered_player_detections.append(filtered_player_dict)
-        return filtered_player_detections
+        self.desired_ids = [1, 2]  # IDs to keep
+        
+    def choose_and_filter_players(self, court_keypoints, detections):
+        # Filtrer les détections pour ne conserver que les IDs désirés
+        filtered_detections = []
+        for frame_detections in detections:
+            filtered_frame = {id: det for id, det in frame_detections.items() if id in self.desired_ids}
+            filtered_detections.append(filtered_frame)
+        return filtered_detections
 
     def choose_players(self, court_keypoints, player_dict):
         distances = []

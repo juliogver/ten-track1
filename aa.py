@@ -10,12 +10,12 @@ def debug_main():
     
     video_filename = os.path.splitext(os.path.basename(input_video_path))[0]
 
-    player_tracker = PlayerTracker(model_path='yolov8x')
+    player_tracker = PlayerTracker(model_path='yolov8x.pt')  # Assurez-vous que le chemin est correct
     ball_tracker = BallTracker(model_path='models/last.pt')
 
     # Detect Players and Ball
-    player_detections = player_tracker.detect_frames(video_frames, read_from_stub=True)
-    ball_detections = ball_tracker.detect_frames(video_frames, read_from_stub=True)
+    player_detections = player_tracker.detect_frames(video_frames, read_from_stub=False)
+    ball_detections = ball_tracker.detect_frames(video_frames, read_from_stub=False)
 
     # Draw output for debugging
     output_video_frames = player_tracker.draw_bboxes(video_frames, player_detections)

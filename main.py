@@ -15,7 +15,7 @@ import os
 
 def main():
     # Read Video
-    input_video_path = "input_videos/Y2meta.app-Best Points of February �� Tracked by the SwingVision app-(1080p60) - Trim.mp4"
+    input_video_path = "input_videos/input_video.mp4"
     video_frames = read_video(input_video_path)
     
     video_filename = os.path.splitext(os.path.basename(input_video_path))[0]
@@ -28,11 +28,11 @@ def main():
     ball_tracker = BallTracker(model_path='models/last.pt')
 
     player_detections = player_tracker.detect_frames(video_frames,
-                                                     read_from_stub=False,
+                                                     read_from_stub=True,
                                                      stub_path=player_detections_path
                                                      )
     ball_detections = ball_tracker.detect_frames(video_frames,
-                                                 read_from_stub=False,
+                                                 read_from_stub=True,
                                                  stub_path=ball_detections_path
                                                  )
     ball_detections = ball_tracker.interpolate_ball_positions(ball_detections)
